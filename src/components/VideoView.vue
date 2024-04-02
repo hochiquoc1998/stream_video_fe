@@ -2,6 +2,9 @@
   <div>
     <h1>XEM LIVE</h1>
     <img :src="imageSrc" alt="" />
+    <img :src="imageSrc" alt="" />
+    <img :src="imageSrc" alt="" />
+    <img :src="imageSrc" alt="" />
   </div>
 </template>
 

@@ -26,7 +26,7 @@ export default {
         video.srcObject = stream;
 
         // Create WebSocket connection with user-specific information
-        this.ws = new WebSocket(`${this.WS_URL}/${this.currentUser}`);
+        this.ws = new WebSocket(`${this.WS_URL}`);
 
         // Send frames at specified FPS
         this.ws.onopen = () => {

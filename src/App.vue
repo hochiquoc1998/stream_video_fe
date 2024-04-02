@@ -1,22 +1,12 @@
 <template>
   <div id="app">
-    <VideoStream />
-
-    <hr />
-    <VideoView />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import VideoStream from './components/VideoStream.vue';
-import VideoView from './components/VideoView.vue';
-
 export default {
   name: 'App',
-  components: {
-    VideoStream,
-    VideoView,
-  },
 };
 </script>
 
