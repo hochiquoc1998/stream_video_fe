@@ -2,9 +2,6 @@
   <div>
     <h1>XEM LIVE</h1>
     <img :src="imageSrc" alt="" />
-    <img :src="imageSrc" alt="" />
-    <img :src="imageSrc" alt="" />
-    <img :src="imageSrc" alt="" />
   </div>
 </template>
 
@@ -14,8 +11,7 @@ export default {
   data() {
     return {
       imageSrc: '',
-      WS_URL:
-        'wss://video-live-be--gleeful-bienenstitch-8c0492.netlify.app/wsin',
+      WS_URL: 'wss://localhost:8090/wsin',
       ws: null,
     };
   },
