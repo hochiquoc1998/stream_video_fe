@@ -7,6 +7,14 @@
 
 <script>
 export default {
+  data() {
+    return {
+      WS_URL: 'wss://localhost:8090/wsout/user1',
+      FPS: 12,
+      ws: null,
+      currentUser: 'user1',
+    };
+  },
   methods: {
     async startCamera() {
       try {
@@ -22,18 +30,51 @@ export default {
           }
         });
 
-        const constraints = {
-          video: {
-            deviceId: backCamera ? { exact: backCamera } : undefined,
-            facingMode: backCamera ? undefined : { exact: 'environment' },
-          },
-        };
+        let constraints;
+
+        if (backCamera) {
+          constraints = {
+            video: {
+              deviceId: { exact: backCamera },
+            },
+          };
+        } else {
+          constraints = {
+            video: {
+              facingMode: 'user',
+            },
+          };
+        }
 
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         this.$refs.video.srcObject = stream;
+        this.handleStream(stream);
       } catch (error) {
         console.error('Error accessing the camera: ', error);
       }
+    },
+    handleStream(stream) {
+      const video = this.$refs.video;
+      video.srcObject = stream;
+
+      // Create WebSocket connection with user-specific information
+      this.ws = new WebSocket(`${this.WS_URL}`);
+
+      // Send frames at specified FPS
+      this.ws.onopen = () => {
+        setInterval(() => {
+          this.ws.send(this.getFrame());
+        }, 1000 / this.FPS);
+      };
+    },
+    getFrame() {
+      const canvas = document.createElement('canvas');
+      const video = this.$refs.video;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      const data = canvas.toDataURL('image/png');
+      return data;
     },
   },
 };
