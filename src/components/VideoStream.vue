@@ -2,11 +2,18 @@
   <div>
     <video ref="video" autoplay></video>
     <button @click="startCamera">Start Camera</button>
+    <hr />
+    <VideoView />
   </div>
 </template>
 
 <script>
+import VideoView from './VideoView.vue';
+
 export default {
+  components: {
+    VideoView,
+  },
   data() {
     return {
       WS_URL: 'wss://localhost:8090/wsout/user1',
