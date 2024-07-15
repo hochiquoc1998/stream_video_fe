@@ -9,7 +9,8 @@
 export default {
   data() {
     return {
-      WS_URL: 'ws://localhost:8090/wsout/user1',
+      WS_URL:
+        'wss://video-live-be--gleeful-bienenstitch-8c0492.netlify.app/wsout/user1',
       FPS: 12,
       ws: null,
       currentUser: 'user1', // Thêm biến để lưu trữ thông tin người dùng hiện tại

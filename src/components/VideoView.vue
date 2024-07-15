@@ -14,7 +14,8 @@ export default {
   data() {
     return {
       imageSrc: '',
-      WS_URL: 'ws://localhost:8090/wsin',
+      WS_URL:
+        'wss://video-live-be--gleeful-bienenstitch-8c0492.netlify.app/wsin',
       ws: null,
     };
   },
