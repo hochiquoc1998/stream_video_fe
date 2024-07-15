@@ -17,26 +17,55 @@ export default {
   },
   mounted() {
     // Get video DOM element
-    const video = this.$refs.video;
+    const constraints = {
+      video: {
+        width: 426,
+        height: 240,
+      },
+    };
 
-    // Request access to webcam
-    navigator.mediaDevices
-      .getUserMedia({ video: { width: 426, height: 240 } })
+    this.getCamera({
+      ...constraints,
+      video: { ...constraints.video, facingMode: { exact: 'environment' } },
+    })
       .then((stream) => {
-        video.srcObject = stream;
-
-        // Create WebSocket connection with user-specific information
-        this.ws = new WebSocket(`${this.WS_URL}`);
-
-        // Send frames at specified FPS
-        this.ws.onopen = () => {
-          setInterval(() => {
-            this.ws.send(this.getFrame());
-          }, 1000 / this.FPS);
-        };
+        this.handleStream(stream);
+      })
+      .catch((error) => {
+        console.warn(
+          'Rear camera not found, switching to front camera: ',
+          error
+        );
+        this.getCamera({
+          ...constraints,
+          video: { ...constraints.video, facingMode: 'user' },
+        })
+          .then((stream) => {
+            this.handleStream(stream);
+          })
+          .catch((err) => {
+            console.error('Error accessing any camera: ', err);
+          });
       });
   },
   methods: {
+    getCamera(constraints) {
+      return navigator.mediaDevices.getUserMedia(constraints);
+    },
+    handleStream(stream) {
+      const video = this.$refs.video;
+      video.srcObject = stream;
+
+      // Create WebSocket connection with user-specific information
+      this.ws = new WebSocket(`${this.WS_URL}`);
+
+      // Send frames at specified FPS
+      this.ws.onopen = () => {
+        setInterval(() => {
+          this.ws.send(this.getFrame());
+        }, 1000 / this.FPS);
+      };
+    },
     // Returns a frame encoded in base64
     getFrame() {
       const canvas = document.createElement('canvas');
