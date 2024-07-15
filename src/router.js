@@ -12,7 +12,7 @@ export default new Router({
       component: VideoStream,
     },
     {
-      path: '/video-view',
+      path: '/live',
       component: VideoView,
     },
   ],
